@@ -167,7 +167,8 @@ int main(void)
     console = GetStdHandle(STD_OUTPUT_HANDLE);
     #endif
 
-    signal(SIGINT, forceKill); // User plans to kill the life cycle of Conway :(
+    signal(SIGINT, forceKill); // The humans often make bad decisions and even some want to destruct the world :(
+
     clearScreen();
 
     while(armageddon != 1) {
