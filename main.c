@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <signal.h>
 
 // Includes for colored version
 #if defined _WIN64 || defined _WIN32
@@ -148,9 +149,14 @@ void clearScreen()
     #endif
 }
 
+void forceKill(){
+    clearScreen();
+    printf("\n\nYou've just destroyed the world. But the Good always win, don't forget it.\n\n");
+    exit(0);
+}
+
 int main(void)
 {
-
 
     // In the beginning God created empty limited world
     World *world = malloc(sizeof(World));
@@ -161,6 +167,7 @@ int main(void)
     console = GetStdHandle(STD_OUTPUT_HANDLE);
     #endif
 
+    signal(SIGINT, forceKill); // User plans to kill the life cycle of Conway :(
     clearScreen();
 
     while(armageddon != 1) {
@@ -179,7 +186,7 @@ int main(void)
             printf("\033[0;37m");
             #endif
 
-            printf("\nContinue the generation ? (y/n/a) [y] ");
+            printf("\nContinue the generation: yes, no, auto ? (y/n/a) [y] ");
             scanf("%c", &dictator_answer);
 
             if(dictator_answer == 'n' || dictator_answer == 'N') {

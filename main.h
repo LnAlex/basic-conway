@@ -26,6 +26,7 @@ void newGeneration(World *world);
 int getAliveNeighbors(World *world, Cell *cell);
 void showTitle();
 void clearScreen();
+void forceKill();
 
 #if defined _WIN64 || defined _WIN32
 HANDLE console;
