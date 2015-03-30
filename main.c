@@ -75,26 +75,39 @@ void newGeneration(World *world)
         }
     }
     else {
+        World *world_tmp = malloc(sizeof(World));
+        memcpy(world_tmp, world, sizeof(World));
+
+        world_tmp->cells = malloc(world->size * world->size * sizeof(Cell));
+        memcpy(world_tmp->cells, world->cells, world->size * world->size * sizeof(Cell));
+
         // Now, let the nature decide if cell must to die or live
         for(int i=0; i < world->size * world->size; i++) {
 
             Cell *current_cell = (world->cells+i);
+            Cell *current_temp_cell = (world_tmp->cells+i);
+
             int pop = getAliveNeighbors(world, current_cell);
 
             if( pop < 2 && (current_cell->state == ALIVE || current_cell->state == NEW) ) { // Under-population
-                current_cell->state = DEAD;
+                current_temp_cell->state = DEAD;
+
             }
             else if( (pop == 2 || pop == 3) && current_cell->state == NEW ) { // Cell growth, no more a baby
-                current_cell->state = ALIVE;
+                current_temp_cell->state = ALIVE;
             }
             else if( pop > 3 && (current_cell->state == ALIVE || current_cell->state == NEW) ) { // Overcrowding
-                current_cell->state = DEAD;
+                current_temp_cell->state = DEAD;
             }
             else if (pop == 3 && current_cell->state == DEAD) { // Cell resurrection
-                current_cell->state = NEW;
+                current_temp_cell->state = NEW;
             }
 
         }
+
+        memcpy(world->cells, world_tmp->cells, world->size * world->size * sizeof(Cell));
+        free(world_tmp);
+
     }
 }
 
